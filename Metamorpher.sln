@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30907.101
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Metamorpher", "Metamorpher.vcxproj", "{AAE4391C-4FD7-4288-A707-7E6A06F3344D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AAE4391C-4FD7-4288-A707-7E6A06F3344D}.Debug|x64.ActiveCfg = Debug|x64
+		{AAE4391C-4FD7-4288-A707-7E6A06F3344D}.Debug|x64.Build.0 = Debug|x64
+		{AAE4391C-4FD7-4288-A707-7E6A06F3344D}.Debug|x86.ActiveCfg = Debug|Win32
+		{AAE4391C-4FD7-4288-A707-7E6A06F3344D}.Debug|x86.Build.0 = Debug|Win32
+		{AAE4391C-4FD7-4288-A707-7E6A06F3344D}.Release|x64.ActiveCfg = Release|x64
+		{AAE4391C-4FD7-4288-A707-7E6A06F3344D}.Release|x64.Build.0 = Release|x64
+		{AAE4391C-4FD7-4288-A707-7E6A06F3344D}.Release|x86.ActiveCfg = Release|Win32
+		{AAE4391C-4FD7-4288-A707-7E6A06F3344D}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CC93D7BE-9F03-4986-9692-7D8B4A26908B}
+	EndGlobalSection
+EndGlobal
