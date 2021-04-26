@@ -32,9 +32,11 @@ for f in fcns:
         })
 sorted_funcs.sort(key = lambda x: x['address'])
 
-file = open("disassembly.txt", "w+")
+ssss = ''
 for f in sorted_funcs:
-    file.write("; function: %s @%08d+%08d\n" % (f['name'], f['address'], f['size']))
+    ssss += "; function: %s @%08d+%08d\n" % (f['name'], f['address'], f['size'])
     for o in f['ops']:
-        file.write("%08d+%02d/%s/: %s\n" % (o['address'], o['size'], o['type'], o['opcode']))
+        ssss += "%08d+%02d/%s/: %s\n" % (o['address'], o['size'], o['type'], o['opcode'])
+file = open("disassembly.txt", "w+")
+file.write(ssss[:-1])
 file.close()

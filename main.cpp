@@ -34,14 +34,14 @@ int main()
 {
 	srand(time(0));
 	// parse PE file
-	PE::Base pe("input.dll");
+	PE::Base pe("E:\\GitHub\\Metamorpher\\input.dll");
 	pe.printInfo();
 
 	std::cout << "disassembling..." << std::endl;
 	// open disassembly file
 	std::string disassembly;
 	{
-		std::ifstream ifile("disassembly.txt", std::ios::in);
+		std::ifstream ifile("E:\\GitHub\\Metamorpher\\disassembly.txt", std::ios::in);
 		if (!ifile.is_open()) return 1;
 
 		ifile.seekg(0, std::ios::end);
@@ -225,7 +225,7 @@ int main()
 			delete[] changed;
 		}
 		std::cout << "Changed a total of " << nBytesChanged << " bytes" << std::endl;
-		std::ofstream out("out/" + std::to_string(i) + ".dll", std::ios::binary);
+		std::ofstream out("E:\\GitHub\\Metamorpher\\out\\" + std::to_string(i) + ".dll", std::ios::binary);
 		out.write(bincopy, pe.fileSize);
 		out.close();
 	}
