@@ -145,10 +145,12 @@ int main()
 			// many 2 byte instructions have a flag to flip the order of 2 operators
 			// 00ttt001 11aaabbb ; ttt aaa, bbb //ttt=[ADD,ADC,AND,OR,SUB,SBB,XOR,CMP]
 			// 00ttt011 11aaabbb ; ttt bbb, aaa
-			// 10001001 11aaabbb ; mov bbb, aaa
-			// 10001011 11aaabbb ; mov aaa, bbb
-			// mutate `add, adc, and, or, sub, sbb, xor, cmp, mov` bi directional operonds
-			RANDOM_IF(ins.size == 2 && (ins.bin[1] & 0b11000000) == 0b11000000 && ((ins.bin[0] & 0b11000101) == 0b00000001 || (ins.bin[0] & ~0b00000010) == 0b10001001))
+			else RANDOM_IF(
+				ins.size == 2 &&
+				((ins.bin[0] & 0b00111000) != 0b00100000) && // skip ANDs because it somehow breaks string encryption
+				((ins.bin[0] & 0b11000101) == 0b00000001) && 
+				((ins.bin[1] & 0b11000000) == 0b11000000) // muse have 2 register arguments
+			)
 			{
 				// invert flag
 				ins.bin[0] ^= 0b00000010;
@@ -162,10 +164,32 @@ int main()
 				changed[1] = true;
 			}
 
+			// same as above but only applied to MOV
+			// 10001001 11aaabbb ; mov bbb, aaa
+			// 10001011 11aaabbb ; mov aaa, bbb
+			else RANDOM_IF(
+				ins.size == 2 &&
+				((ins.bin[0] & 0b11111101) == 0b10001001) && // must be a MOV
+				((ins.bin[1] & 0b11000000) == 0b11000000) // muse have 2 register arguments
+				)
+			{
+				// invert flag
+				ins.bin[0] ^= 0b00000010;
+				// swap registers
+				uint8_t loreg = ins.bin[1] & 0b00000111;
+				uint8_t hireg = (ins.bin[1] & 0b00111000) >> 3;
+				ins.bin[1] = 0b11000000 | loreg << 3 | hireg;
+
+				//std::cout << "swapped order of arguments @ " << ins.fileAddress << std::endl;
+				changed[0] = true;
+				changed[1] = true;
+			}
+
+
 			//001100xx 11aaabbb     ; xor a, b
 			//001010xx 11aaabbb     ; sub a, b
 			// swap `xor x,x` to `sub x,x`
-			RANDOM_IF(
+			else RANDOM_IF(
 				ins.size == 2 &&
 				(((ins.bin[1] >> 3) & 0b00000111) == (ins.bin[1] & 0b00000111)) && // registers are equal and
 				(((ins.bin[0] & 0b11111100) == 0b00110000) || ((ins.bin[0] & 0b11111100) == 0b00101000))) // opcode is xor or is sub
@@ -177,7 +201,7 @@ int main()
 			}
 
 			// add/sub 4-byte constant to/from register
-			RANDOM_IF(ins.size == 6 && ins.bin[0] == 0b10000001 && ((ins.bin[1] & 0b11111000) == 0b11000000 || (ins.bin[1] & 0b11111000) == 0b11101000))
+			else RANDOM_IF(ins.size == 6 && ins.bin[0] == 0b10000001 && ((ins.bin[1] & 0b11111000) == 0b11000000 || (ins.bin[1] & 0b11111000) == 0b11101000))
 			{
 				int32_t value = *(int32_t*)(ins.bin + 2);
 				if (127 <= value && value <= 127 * 2)
@@ -203,7 +227,7 @@ int main()
 			// ; same as
 			// xor reg, reg
 			// dec reg
-			RANDOM_IF(ins.size == 3 && ins.bin[0] == 0b10000011 && (ins.bin[1] & 0b11111000) == 0b11001000 && (int8_t)ins.bin[2] == -1)
+			else RANDOM_IF(ins.size == 3 && ins.bin[0] == 0b10000011 && (ins.bin[1] & 0b11111000) == 0b11001000 && (int8_t)ins.bin[2] == -1)
 			{
 				bool flip = rand() % 2;
 				uint8_t reg = ins.bin[1] & 0b00000111;
@@ -218,7 +242,6 @@ int main()
 				changed[1] = true;
 				changed[2] = true;
 			}
-
 			for (size_t i = 0; i < ins.size; i++)
 				if (changed[i])
 					nBytesChanged++;
